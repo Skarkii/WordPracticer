@@ -10,6 +10,7 @@
 <body>
 <div class="top-bar">
     <div class="left">
+        <button onclick="openAboutModal()">About</button>
         <button onclick="openOptionsModal()">Options</button>
     </div>
     <div class="right">
@@ -44,6 +45,14 @@
         <h2 id="skipsCount">Skips: 0</h2>
         <h2 id="mistakesCount">Mistakes: 0</h2>
         <button class="close-button" onclick="closeStatisticsModal()">Close</button>
+    </div>
+</div>
+
+<div class="modal" id="aboutModal">
+    <div class="modal-content">
+        <h1>About</h1>
+        <a href="https://github.com/Skarkii/WordPracticer">Github</a>
+        <button class="close-button" onclick="closeAboutModal()">Close</button>
     </div>
 </div>
 </body>

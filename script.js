@@ -115,6 +115,14 @@ function closeOptionsModal() {
     }
 }
 
+function openAboutModal() {
+    document.getElementById('aboutModal').style.display = 'flex';
+}
+
+function closeAboutModal() {
+    document.getElementById('aboutModal').style.display = 'none';
+}
+
 function updateStatistics() {
     const totalMistakesDisplay = document.getElementById('mistakesCount');
     totalMistakesDisplay.textContent = `Mistakes: ${totalMistakes}`;
