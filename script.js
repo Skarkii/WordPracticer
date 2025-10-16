@@ -24,6 +24,7 @@ let totalCorrect = 0;
 
 let skipOnClose = false;
 let reverseTranslation = false;
+let spellingWarnings = true;
 
 function openWordsModal(){
     document.getElementById('wordsModal').style.display = 'flex';
@@ -98,11 +99,22 @@ function onReverseTranslationToggle() {
 }
 document.getElementById('reverseTranslationToggle').addEventListener('change', onReverseTranslationToggle);
 
+function onSpellingWarningsToggle(){
+    spellingWarnings = this.checked;
+    if(spellingWarnings === false) {
+        const translationInput = document.getElementById('translationInput');
+        translationInput.style.borderColor = '#333';
+    }
+}
+document.getElementById('spellingWarningsToggle').addEventListener('change', onSpellingWarningsToggle);
+
 function onInputChange() {
     const inputText = this.value.toLowerCase();
     const translationInput = document.getElementById('translationInput');
     if(!isInputCorrect(inputText)) {
-        translationInput.style.borderColor = 'red';
+        if(spellingWarnings){
+            translationInput.style.borderColor = 'red';
+        }
         totalMistakes++;
         return;
     }
@@ -216,7 +228,9 @@ function updateWord(wordMap) {
 
 function resetToggles() {
     document.getElementById('reverseTranslationToggle').checked = false;
+    document.getElementById('spellingWarningsToggle').checked = true;
     reverseTranslation = false;
+    spellingWarnings = true;
 }
 
 function main() {
