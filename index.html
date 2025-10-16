@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
-    <title>WordPractice</title>
+    <title>Word Practicer</title>
 </head>
 <body>
 <div class="top-bar">
@@ -13,10 +13,12 @@
         <button onclick="openAboutModal()">About</button>
         <button onclick="openOptionsModal()">Options</button>
     </div>
+    <div class="center">
+        <h2 id="currentLanguage">Word Practicer</h2>
+    </div>
     <div class="right">
-    <!--        <a href="#profile">Profile</a>-->
         <button onclick="openStatisticsModal()">Statistics</button>
-        <a href="#words">Words</a>
+        <button onclick="openWordsModal()">Words</button>
     </div>
 </div>
 <div class="content">
@@ -53,6 +55,18 @@
         <h1>About</h1>
         <a href="https://github.com/Skarkii/WordPracticer">Github</a>
         <button class="close-button" onclick="closeAboutModal()">Close</button>
+    </div>
+</div>
+
+<div class="modal" id="wordsModal">
+    <div class="modal-content">
+        <a>Upload your own File:</a>
+        <input type="file" id="fileInput">
+        <br>
+        <a>Use an existing Language:</a>
+        <br>
+        <button onclick="loadExistingLanguage('korean')">Korean</button>
+        <button class="close-button" onclick="closeWordsModal()">Close</button>
     </div>
 </div>
 </body>

@@ -1,83 +1,4 @@
 let wordListWithTranslations = new Map([
-    ["strawberry", "딸기"],
-    ["would you like", "드릴까요"],
-    ["wow", "와"],
-    ["happy birthday", "생일 축하해요"],
-    ["cute", "귀여운"],
-    ["necklace", "목걸이"],
-    ["watch", "시계"],
-    ["gift", "선물"],
-    ["fifteen", "열다섯"],
-    ["younger sister", "여동생"],
-    ["today", "오늘"],
-    ["birthday", "생일"],
-    ["bread", "빵"],
-    ["bubble tea", "버블티"],
-    ["with", "이랑"],
-    ["sweet", "단"],
-    ["tteokbokki", "떡볶이"],
-    ["rice", "밥"],
-    ["this", "이것"],
-    ["ramyeon", "라면"],
-    ["galbitang", "갈비탕"],
-    ["boss", "사장님"],
-    ["spicy", "매운"],
-    ["How about", "어때요"],
-    ["food", "음식"],
-    ["hungry", "배고파요"],
-    ["is", "은"],
-    ["cat", "고양이"],
-    ["grey", "회색"],
-    ["five", "다섯"],
-    ["Meow", "야옹"],
-    ["nineteen", "열아홉"],
-    ["friend", "친구"],
-    ["thirty", "서른"],
-    ["no", "아니요"],
-    ["USA", "미국"],
-    ["Korea", "한국"],
-    ["person", "사람"],
-    ["China", "중국"],
-    ["Nice to meet you", "반가워요"],
-    ["yes", "네"],
-    ["teacher", "선생님"],
-    ["doctor", "의사"],
-    ["company employee", "회사원"],
-    ["is", "는"],
-    ["Bora", "보라"],
-    ["Minjun", "민준"],
-    ["Mr", "씨"],
-    ["I", "저"],
-    ["expensive", "비싼"],
-    ["camera", "카메라"],
-    ["pen", "볼펜"],
-    ["heavy", "무겁다"],
-    ["white", "하얀색"],
-    ["book", "책"],
-    ["wallet", "지갑"],
-    ["bag", "가방"],
-    ["is", "이에요"],
-    ["new", "새"],
-    ["cell phone", "핸드폰"],
-    ["hot", "뜨거운"],
-    ["stew", "찌개"],
-    ["meat", "고기"],
-    ["delicious", "맛있는"],
-    ["dumpling", "만두"],
-    ["japchae", "잡채"],
-    ["my", "제"],
-    ["tofu", "두부"],
-    ["kimchi", "김치"],
-    ["thank you", "감사합니다"],
-    ["cake", "케이크"],
-    ["bingsu", "빙수"],
-    ["please", "주세요"],
-    ["and", "랑"],
-    ["juice", "주스"],
-    ["I", "나"],
-    ["hello", "안녕하세요"],
-    ["coffee", "커피"],
-    ["tea", "차"]
     ]);
 
 function getRandomWordWithTranslation() {
@@ -93,6 +14,7 @@ function getRandomWordWithTranslation() {
 }
 
 
+let currentLanguage = "";
 let currentWordDisplay = "";
 let currentWordTranslation = "";
 
@@ -102,6 +24,14 @@ let totalCorrect = 0;
 
 let skipOnClose = false;
 let reverseTranslation = false;
+
+function openWordsModal(){
+    document.getElementById('wordsModal').style.display = 'flex';
+}
+
+function closeWordsModal(){
+    document.getElementById('wordsModal').style.display = 'none';
+}
 
 function openOptionsModal() {
     document.getElementById('optionsModal').style.display = 'flex';
@@ -219,8 +149,59 @@ const translatedSuccessfully = async () => {
 
 document.getElementById('translationInput').addEventListener('input', onInputChange);
 
+function updateLanguageTitle(languageName) {
+    document.getElementById('currentLanguage').textContent = languageName;
+}
+
+function applyLanguageFromData(data){
+    wordListWithTranslations.clear()
+    const rows = data.split('\n').filter(row => row.trim() !== '');
+    let output = '';
+
+    rows.forEach((str, i) => {
+        if (i === 0) {
+            updateLanguageTitle(str)
+            return
+        }
+        if (i === 1) {
+            //Not sure if I want this Yet.
+            return
+        }
+        let words = str.split(':')
+        wordListWithTranslations.set(words[0], words[1]);
+    });
+}
+
+document.getElementById('fileInput').addEventListener('change', function() {
+    const file = this.files[0];
+    const reader = new FileReader();
+    reader.onload = function() {
+        applyLanguageFromData(reader.result)
+    };
+    reader.readAsText(file);
+});
+
+function loadExistingLanguage(languageName) {
+    const url = '/languages/' + languageName + ".wp";
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            applyLanguageFromData(data)
+        })
+        .catch(error => {
+            console.error('Error loading file:', error);
+        });
+
+}
 
 function updateWord(wordMap) {
+
     currentWordDisplay = wordMap.word;
     currentWordTranslation = wordMap.translation;
     if (reverseTranslation) {
