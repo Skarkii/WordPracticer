@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <title>WordPractice</title>
+</head>
+<body>
+<div class="top-bar">
+    <div class="left">
+        <button onclick="openOptionsModal()">Options</button>
+    </div>
+    <div class="right">
+    <!--        <a href="#profile">Profile</a>-->
+        <button onclick="openStatisticsModal()">Statistics</button>
+        <a href="#words">Words</a>
+    </div>
+</div>
+<div class="content">
+    <div class="display-text" id="displayText"></div>
+    <input type="text" class="input-box" id="translationInput" placeholder="Enter translation">
+    <button class="skip-button" onclick="skipWord()" id="skipButton">Skip</button>
+    <button class="reveal-button" onclick="revealTranslation()" id="revealButton">Reveal!</button>
+    <div class="reveal-text" id="revealText"></div>
+    <!--    <div class="score-text" id="scoreText"></div>-->
+    <!--    <div class="timer-text" id="timerText"></div>-->
+</div>
+<div class="modal" id="optionsModal">
+    <div class="modal-content">
+        <h2>Options</h2>
+        <label><input type="checkbox" id="reverseTranslationToggle"> Reverse Translation</label>
+<!--        <label><input type="checkbox" name="option2"> </label>-->
+<!--        <label><input type="checkbox" name="option3"> </label>-->
+        <button class="close-button" onclick="closeOptionsModal()">Close</button>
+    </div>
+</div>
+
+<div class="modal" id="statisticsModal">
+    <div class="modal-content">
+        <h1>Statistics</h1>
+        <h2 id="correctAnswersCount">Correct Answers: 0</h2>
+        <h2 id="skipsCount">Skips: 0</h2>
+        <h2 id="mistakesCount">Mistakes: 0</h2>
+        <button class="close-button" onclick="closeStatisticsModal()">Close</button>
+    </div>
+</div>
+</body>
+</html>
