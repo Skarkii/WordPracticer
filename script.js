@@ -183,6 +183,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
 
 function loadExistingLanguage(languageName) {
     const url = '/languages/' + languageName + ".wp";
+    console.log(url)
 
     fetch(url)
         .then(response => {
