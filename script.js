@@ -182,8 +182,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
 });
 
 function loadExistingLanguage(languageName) {
-    const url = '/languages/' + languageName + ".wp";
-    console.log(url)
+    const url = '/WordPracticer/languages/' + languageName + ".wp";
 
     fetch(url)
         .then(response => {
