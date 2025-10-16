@@ -20,6 +20,7 @@ let currentWordTranslation = "";
 
 let totalMistakes = 0;
 let totalSkips = 0;
+let totalReveals = 0;
 let totalCorrect = 0;
 
 let skipOnClose = false;
@@ -32,6 +33,10 @@ function openWordsModal(){
 
 function closeWordsModal(){
     document.getElementById('wordsModal').style.display = 'none';
+    if(skipOnClose) {
+        skipWord(false);
+        skipOnClose = false;
+    }
 }
 
 function openOptionsModal() {
@@ -82,7 +87,17 @@ function isInputCorrect(input) {
     return true;
 }
 
+let revealedThisRound = false;
+function addReveal(){
+    revealedThisRound = true;
+    totalReveals++;
+    document.getElementById('revealCount').textContent = `Reveals: ${totalReveals}`;
+}
+
 function revealTranslation() {
+    if(!revealedThisRound && currentWordTranslation.length !== 0) {
+        addReveal()
+    }
     revealText = document.getElementById('revealText');
 
     if(revealText.textContent.length !== 0) {
@@ -182,6 +197,7 @@ function applyLanguageFromData(data){
         let words = str.split(':')
         wordListWithTranslations.set(words[0], words[1]);
     });
+    skipOnClose = true;
 }
 
 document.getElementById('fileInput').addEventListener('change', function() {
@@ -213,6 +229,7 @@ function loadExistingLanguage(languageName) {
 }
 
 function updateWord(wordMap) {
+    revealedThisRound = false;
 
     currentWordDisplay = wordMap.word;
     currentWordTranslation = wordMap.translation;
