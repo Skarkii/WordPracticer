@@ -98,7 +98,7 @@ function revealTranslation() {
     if(!revealedThisRound && currentWordTranslation.length !== 0) {
         addReveal()
     }
-    revealText = document.getElementById('revealText');
+    let revealText = document.getElementById('revealText');
 
     if(revealText.textContent.length !== 0) {
         revealText.textContent = "";
@@ -137,7 +137,7 @@ function onInputChange() {
 
     if (inputText.length !== currentWordTranslation.length) { return; }
 
-    translatedSuccessfully();
+    translatedSuccessfully().then();
 
 }
 
@@ -177,13 +177,13 @@ const translatedSuccessfully = async () => {
 document.getElementById('translationInput').addEventListener('input', onInputChange);
 
 function updateLanguageTitle(languageName) {
-    document.getElementById('currentLanguage').textContent = languageName;
+    currentLanguage = languageName;
+    document.getElementById('currentLanguage').textContent = currentLanguage;
 }
 
 function applyLanguageFromData(data){
     wordListWithTranslations.clear()
     const rows = data.split('\n').filter(row => row.trim() !== '');
-    let output = '';
 
     rows.forEach((str, i) => {
         if (i === 0) {
