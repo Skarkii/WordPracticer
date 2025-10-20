@@ -27,36 +27,28 @@ let skipOnClose = false;
 let reverseTranslation = false;
 let spellingWarnings = true;
 
-function openWordsModal(){
-    document.getElementById('wordsModal').style.display = 'flex';
+
+
+const Modals = {
+    Words: 'wordsModal',
+    Options: 'optionsModal',
+    About: 'aboutModal',
+    Statistics: 'statisticsModal'
 }
 
-function closeWordsModal(){
-    document.getElementById('wordsModal').style.display = 'none';
+function openModal(modal) {
+    if(Modals[modal] === 'statisticsModal') {
+        updateStatistics()
+    }
+    document.getElementById(Modals[modal]).style.display = 'flex';
+}
+
+function closeModal(modal) {
+    document.getElementById(Modals[modal]).style.display = 'none';
     if(skipOnClose) {
         skipWord(false);
         skipOnClose = false;
     }
-}
-
-function openOptionsModal() {
-    document.getElementById('optionsModal').style.display = 'flex';
-}
-
-function closeOptionsModal() {
-    document.getElementById('optionsModal').style.display = 'none';
-    if(skipOnClose) {
-        skipWord(false);
-        skipOnClose = false;
-    }
-}
-
-function openAboutModal() {
-    document.getElementById('aboutModal').style.display = 'flex';
-}
-
-function closeAboutModal() {
-    document.getElementById('aboutModal').style.display = 'none';
 }
 
 function updateStatistics() {
@@ -68,14 +60,6 @@ function updateStatistics() {
     totalCorrectDisplay.textContent = `Correct: ${totalCorrect}`;
 }
 
-function openStatisticsModal() {
-    updateStatistics()
-    document.getElementById('statisticsModal').style.display = 'flex';
-}
-
-function closeStatisticsModal() {
-    document.getElementById('statisticsModal').style.display = 'none';
-}
 
 function isInputCorrect(input) {
     for (let i = 0; i < input.length; i++) {

@@ -10,15 +10,15 @@
 <body>
 <div class="top-bar">
     <div class="left">
-        <button onclick="openAboutModal()">About</button>
-        <button onclick="openOptionsModal()">Options</button>
+        <button onclick="openModal('About')">About</button>
+        <button onclick="openModal('Options')">Options</button>
     </div>
     <div class="center">
         <h2 id="currentLanguage">Word Practicer</h2>
     </div>
     <div class="right">
-        <button onclick="openStatisticsModal()">Statistics</button>
-        <button onclick="openWordsModal()">Words</button>
+        <button onclick="openModal('Statistics')">Statistics</button>
+        <button onclick="openModal('Words')">Words</button>
     </div>
 </div>
 <div class="content">
@@ -35,7 +35,7 @@
         <h2>Options</h2>
         <label><input type="checkbox" id="reverseTranslationToggle">Reverse Translation</label>
         <label><input type="checkbox" checked id="spellingWarningsToggle">Warn on invalid spelling</label>
-        <button class="close-button" onclick="closeOptionsModal()">Close</button>
+        <button class="close-button" onclick="closeModal('Options')">Close</button>
     </div>
 </div>
 
@@ -46,7 +46,7 @@
         <h2 id="skipsCount">Skips: 0</h2>
         <h2 id="revealCount">Reveals: 0</h2>
         <h2 id="mistakesCount">Mistakes: 0</h2>
-        <button class="close-button" onclick="closeStatisticsModal()">Close</button>
+        <button class="close-button" onclick="closeModal('Statistics')">Close</button>
     </div>
 </div>
 
@@ -54,7 +54,7 @@
     <div class="modal-content">
         <h1>About</h1>
         <a href="https://github.com/Skarkii/WordPracticer">Github</a>
-        <button class="close-button" onclick="closeAboutModal()">Close</button>
+        <button class="close-button" onclick="closeModal('About')">Close</button>
     </div>
 </div>
 
@@ -67,7 +67,7 @@
         <br>
         <button onclick="loadExistingLanguage('korean')">Korean</button>
         <button onclick="loadExistingLanguage('koreanletters')">Korean Letters</button>
-        <button class="close-button" onclick="closeWordsModal()">Close</button>
+        <button class="close-button" onclick="closeModal('Words')">Close</button>
     </div>
 </div>
 </body>
