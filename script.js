@@ -126,23 +126,27 @@ function revealTranslation() {
 
 function setReverseTranslation(value) {
     reverseTranslation = value;
-    skipOnClose = true;
     updateOption('reverseTranslation', value);
+    document.getElementById('spellingWarningsToggle').checked = value;
+
+    skipOnClose = true;
+}
+
+function setSpellingWarnings(value) {
+    spellingWarnings = value;
+    updateOption('spellingWarnings', value);
+    document.getElementById('spellingWarningsToggle').checked = value;
+
+    if(spellingWarnings === false) {
+        const translationInput = document.getElementById('translationInput');
+        translationInput.style.borderColor = '#333';
+    }
 }
 
 function onReverseTranslationToggle() {
     setReverseTranslation(this.checked);
 }
 document.getElementById('reverseTranslationToggle').addEventListener('change', onReverseTranslationToggle);
-
-function setSpellingWarnings(value) {
-    updateOption('spellingWarnings', value);
-    spellingWarnings = value;
-    if(spellingWarnings === false) {
-        const translationInput = document.getElementById('translationInput');
-        translationInput.style.borderColor = '#333';
-    }
-}
 
 function onSpellingWarningsToggle(){
     setSpellingWarnings(this.checked);
