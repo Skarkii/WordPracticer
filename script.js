@@ -25,8 +25,8 @@ function loadOptions() {
     const savedOptions = localStorage.getItem('programOptions') || programOptions;
 
 
-    reverseTranslation = savedOptions ? JSON.parse(savedOptions).reverseTranslation : false;
-    spellingWarnings = savedOptions ? JSON.parse(savedOptions).spellingWarnings : true;
+    setReverseTranslation(savedOptions ? JSON.parse(savedOptions).reverseTranslation : false);
+    setSpellingWarnings(savedOptions ? JSON.parse(savedOptions).spellingWarnings : true);
 
 }
 document.addEventListener('DOMContentLoaded', loadOptions);
