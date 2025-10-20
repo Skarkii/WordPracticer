@@ -19,7 +19,6 @@ function updateOption(key, value){
     else {
         console.log("Invalid option: " + key);
     }
-    saveOptions()
 }
 
 function loadOptions() {
