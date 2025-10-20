@@ -1,3 +1,37 @@
+const validOptions = ['language', 'languageFile', 'reverseTranslation', 'spellingWarnings',]
+let programOptions = {
+    language: "English", // Not used yet
+    languageFile: "English.wp", // Same as above
+
+    reverseTranslation: false,
+    spellingWarnings: true,
+}
+
+function saveOptions() {
+    localStorage.setItem('programOptions', JSON.stringify(programOptions));
+}
+
+function updateOption(key, value){
+    if(validOptions.includes(key)){
+        programOptions[key] = value;
+        saveOptions();
+    }
+    else {
+        console.log("Invalid option: " + key);
+    }
+    saveOptions()
+}
+
+function loadOptions() {
+    const savedOptions = localStorage.getItem('programOptions') || programOptions;
+
+
+    reverseTranslation = savedOptions ? JSON.parse(savedOptions).reverseTranslation : false;
+    spellingWarnings = savedOptions ? JSON.parse(savedOptions).spellingWarnings : true;
+
+}
+document.addEventListener('DOMContentLoaded', loadOptions);
+
 let wordListWithTranslations = new Map([
     ]);
 
@@ -91,19 +125,28 @@ function revealTranslation() {
     }
 }
 
-function onReverseTranslationToggle() {
-    console.log("Reverse translation toggled: " + this.checked);
-    reverseTranslation = this.checked;
+function setReverseTranslation(value) {
+    reverseTranslation = value;
     skipOnClose = true;
+    updateOption('reverseTranslation', value);
+}
+
+function onReverseTranslationToggle() {
+    setReverseTranslation(this.checked);
 }
 document.getElementById('reverseTranslationToggle').addEventListener('change', onReverseTranslationToggle);
 
-function onSpellingWarningsToggle(){
-    spellingWarnings = this.checked;
+function setSpellingWarnings(value) {
+    updateOption('spellingWarnings', value);
+    spellingWarnings = value;
     if(spellingWarnings === false) {
         const translationInput = document.getElementById('translationInput');
         translationInput.style.borderColor = '#333';
     }
+}
+
+function onSpellingWarningsToggle(){
+    setSpellingWarnings(this.checked);
 }
 document.getElementById('spellingWarningsToggle').addEventListener('change', onSpellingWarningsToggle);
 
@@ -227,15 +270,7 @@ function updateWord(wordMap) {
     document.getElementById('revealText').textContent = "";
 }
 
-function resetToggles() {
-    document.getElementById('reverseTranslationToggle').checked = false;
-    document.getElementById('spellingWarningsToggle').checked = true;
-    reverseTranslation = false;
-    spellingWarnings = true;
-}
-
 function main() {
-    resetToggles();
     const wordMap = getRandomWordWithTranslation();
     updateWord(wordMap);
 }
