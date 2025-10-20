@@ -127,7 +127,7 @@ function revealTranslation() {
 function setReverseTranslation(value) {
     reverseTranslation = value;
     updateOption('reverseTranslation', value);
-    document.getElementById('spellingWarningsToggle').checked = value;
+    document.getElementById('reverseTranslationToggle').checked = value;
 
     skipOnClose = true;
 }
