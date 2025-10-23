@@ -1,10 +1,11 @@
-const validOptions = ['language', 'languageFile', 'reverseTranslation', 'spellingWarnings',]
+const validOptions = ['language', 'languageFile', 'reverseTranslation', 'spellingWarnings', 'textToSpeech']
 let programOptions = {
     language: "English", // Not used yet
     languageFile: "English.wp", // Same as above
 
     reverseTranslation: false,
     spellingWarnings: true,
+    textToSpeech: false,
 }
 
 function saveOptions() {
@@ -27,6 +28,7 @@ function loadOptions() {
 
     setReverseTranslation(savedOptions ? JSON.parse(savedOptions).reverseTranslation : false);
     setSpellingWarnings(savedOptions ? JSON.parse(savedOptions).spellingWarnings : true);
+    setTextToSpeech(savedOptions ? JSON.parse(savedOptions).textToSpeech : true);
 
 }
 document.addEventListener('DOMContentLoaded', loadOptions);
@@ -59,6 +61,7 @@ let totalCorrect = 0;
 let skipOnClose = false;
 let reverseTranslation = false;
 let spellingWarnings = true;
+let textToSpeech = false;
 
 
 
@@ -124,6 +127,12 @@ function revealTranslation() {
     }
 }
 
+function setTextToSpeech(value){
+    textToSpeech = value;
+    updateOption('textToSpeech', value);
+    document.getElementById('textToSpeechToggle').checked = value;
+}
+
 function setReverseTranslation(value) {
     reverseTranslation = value;
     updateOption('reverseTranslation', value);
@@ -143,15 +152,9 @@ function setSpellingWarnings(value) {
     }
 }
 
-function onReverseTranslationToggle() {
-    setReverseTranslation(this.checked);
-}
-document.getElementById('reverseTranslationToggle').addEventListener('change', onReverseTranslationToggle);
-
-function onSpellingWarningsToggle(){
-    setSpellingWarnings(this.checked);
-}
-document.getElementById('spellingWarningsToggle').addEventListener('change', onSpellingWarningsToggle);
+document.getElementById('reverseTranslationToggle').addEventListener('change', setReverseTranslation);
+document.getElementById('spellingWarningsToggle').addEventListener('change', setSpellingWarnings);
+document.getElementById('textToSpeechToggle').addEventListener('change', setTextToSpeech);
 
 function onInputChange() {
     const inputText = this.value.toLowerCase();
@@ -271,6 +274,11 @@ function updateWord(wordMap) {
     document.getElementById('displayText').textContent = currentWordDisplay.charAt(0).toUpperCase() + currentWordDisplay.slice(1);
 
     document.getElementById('revealText').textContent = "";
+
+    const message = new SpeechSynthesisUtterance('Hello, welcome to our website!');
+    message.lang = "ko"
+
+    window.speechSynthesis.speak(message)
 }
 
 function main() {
