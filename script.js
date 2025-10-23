@@ -152,9 +152,9 @@ function setSpellingWarnings(value) {
     }
 }
 
-document.getElementById('reverseTranslationToggle').addEventListener('change', setReverseTranslation);
-document.getElementById('spellingWarningsToggle').addEventListener('change', setSpellingWarnings);
-document.getElementById('textToSpeechToggle').addEventListener('change', setTextToSpeech);
+document.getElementById('reverseTranslationToggle').addEventListener('change', setReverseTranslation, checked);
+document.getElementById('spellingWarningsToggle').addEventListener('change', setSpellingWarnings, checked);
+document.getElementById('textToSpeechToggle').addEventListener('change', setTextToSpeech, checked);
 
 function onInputChange() {
     const inputText = this.value.toLowerCase();
