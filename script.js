@@ -275,7 +275,7 @@ function updateWord(wordMap) {
 
     document.getElementById('revealText').textContent = "";
 
-    const message = new SpeechSynthesisUtterance('Hello, welcome to our website!');
+    const message = new SpeechSynthesisUtterance(currentWordTranslation);
     message.lang = "ko"
 
     window.speechSynthesis.speak(message)
