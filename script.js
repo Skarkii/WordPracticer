@@ -35,6 +35,9 @@ function loadOptions() {
         console.log("Local file is not yet implemented for reloading the page")
         const wordMap = getRandomWordWithTranslation();
         updateWord(wordMap);
+    }
+    else if(savedOptions.languageLoadMethod === "customUrl") {
+        loadLanguageFromUrl(savedOptions.languageFile)
     } else {
         const wordMap = getRandomWordWithTranslation();
         updateWord(wordMap);
@@ -305,22 +308,7 @@ function applyLanguageFromData(data){
     // skipOnClose = true;
 }
 
-document.getElementById('fileInput').addEventListener('change', function() {
-    updateOption('languageLoadMethod', 'LocalFile')
-    updateOption('languageFile', '')
-    const file = this.files[0];
-    const reader = new FileReader();
-    reader.onload = function() {
-        applyLanguageFromData(reader.result)
-    };
-    reader.readAsText(file);
-});
-
-function loadExistingLanguage(languageName) {
-    updateOption('languageLoadMethod', 'ExistingLanguage')
-    updateOption('languageFile', languageName)
-    const url = '/WordPracticer/languages/' + languageName + ".wp";
-
+function loadLanguageFromUrl(url) {
     fetch(url)
         .then(response => {
             if (!response.ok) {
@@ -334,7 +322,31 @@ function loadExistingLanguage(languageName) {
         .catch(error => {
             console.error('Error loading file:', error);
         });
+}
 
+document.getElementById('fileInput').addEventListener('change', function() {
+    updateOption('languageLoadMethod', 'LocalFile')
+    updateOption('languageFile', '')
+    const file = this.files[0];
+    const reader = new FileReader();
+    reader.onload = function() {
+        applyLanguageFromData(reader.result)
+    };
+    reader.readAsText(file);
+});
+
+function loadLanguageFromUrlInput(){
+    const url = document.getElementById('languageUrlInput').value;
+    updateOption('languageLoadMethod', 'customUrl')
+    updateOption('languageFile', url)
+    loadLanguageFromUrl(url)
+}
+
+function loadExistingLanguage(languageName) {
+    updateOption('languageLoadMethod', 'ExistingLanguage')
+    updateOption('languageFile', languageName)
+    const url = '/WordPracticer/languages/' + languageName + ".wp";
+    loadLanguageFromUrl(url)
 }
 
 function playCurrentWord() {
