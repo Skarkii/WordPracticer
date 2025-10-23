@@ -135,6 +135,13 @@ function setTextToSpeech(value, toggle=false){
     textToSpeech = value;
     updateOption('textToSpeech', value);
     document.getElementById('textToSpeechToggle').checked = value;
+
+    if(textToSpeech) {
+        console.log("Text to speech enabled")
+        document.getElementById('audioButton').style.display = "block";
+    } else {
+        document.getElementById('audioButton').style.display = "none";
+    }
 }
 
 function setReverseTranslation(value, toggle=false) {
@@ -272,6 +279,16 @@ function loadExistingLanguage(languageName) {
 
 }
 
+function playCurrentWord() {
+    const message = new SpeechSynthesisUtterance(currentWordDisplay);
+    if(reverseTranslation) {
+        message.lang = languageCodes[1];
+    } else {
+        message.lang = languageCodes[0];
+    }
+    window.speechSynthesis.speak(message)
+}
+
 function updateWord(wordMap) {
     revealedThisRound = false;
 
@@ -287,13 +304,7 @@ function updateWord(wordMap) {
     document.getElementById('revealText').textContent = "";
 
     if(textToSpeech) {
-        const message = new SpeechSynthesisUtterance(currentWordDisplay);
-        if(reverseTranslation) {
-            message.lang = languageCodes[1];
-        } else {
-            message.lang = languageCodes[0];
-        }
-        window.speechSynthesis.speak(message)
+        playCurrentWord();
     }
 }
 
