@@ -131,7 +131,6 @@ function updateStatistics() {
 
 function isInputCorrect(input) {
     for (let i = 0; i < input.length; i++) {
-        // console.log(input[i] + " - " + currentWordTranslation[i])
         if (input[i] !== currentWordTranslation[i]) {
             return false;
         }
@@ -318,7 +317,8 @@ function applyLanguageFromData(data){
             return
         }
         let words = str.split(':')
-        wordListWithTranslations.set(words[0], words[1]);
+        const trimEdges = (s) => (s ?? '').replace(/^[\s\b]+|[\s\b]+$/g, '');
+        wordListWithTranslations.set(trimEdges(words[0]), trimEdges(words[1]));
     });
 
     const wordMap = getRandomWordWithTranslation();
