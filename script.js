@@ -128,21 +128,31 @@ function revealTranslation() {
     }
 }
 
-function setTextToSpeech(value){
+function setTextToSpeech(value, toggle=false){
+    if (toggle) {
+        value = !textToSpeech;
+    }
     textToSpeech = value;
     updateOption('textToSpeech', value);
     document.getElementById('textToSpeechToggle').checked = value;
 }
 
-function setReverseTranslation(value) {
+function setReverseTranslation(value, toggle=false) {
+    if (toggle) {
+        value = !reverseTranslation;
+    }
     reverseTranslation = value;
     updateOption('reverseTranslation', value);
     document.getElementById('reverseTranslationToggle').checked = value;
 
     skipOnClose = true;
+    console.log("Reverse: " + reverseTranslation)
 }
 
-function setSpellingWarnings(value) {
+function setSpellingWarnings(value, toggle=false) {
+    if (toggle) {
+        value = !spellingWarnings;
+    }
     spellingWarnings = value;
     updateOption('spellingWarnings', value);
     document.getElementById('spellingWarningsToggle').checked = value;
@@ -153,9 +163,9 @@ function setSpellingWarnings(value) {
     }
 }
 
-document.getElementById('reverseTranslationToggle').addEventListener('change', setReverseTranslation);
-document.getElementById('spellingWarningsToggle').addEventListener('change', setSpellingWarnings);
-document.getElementById('textToSpeechToggle').addEventListener('change', setTextToSpeech);
+document.getElementById('reverseTranslationToggle').addEventListener('change', setReverseTranslation.bind(null, true));
+document.getElementById('spellingWarningsToggle').addEventListener('change', setSpellingWarnings.bind(null, true));
+document.getElementById('textToSpeechToggle').addEventListener('change', setTextToSpeech.bind(null, true));
 
 function onInputChange() {
     const inputText = this.value.toLowerCase();
