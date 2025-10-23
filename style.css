@@ -23,6 +23,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /* Enable wrap on small screens */
+    flex-wrap: nowrap;
 
     position: fixed;
     top: 0;
@@ -337,4 +339,97 @@ button.audio-button:active {
     .content .reveal-button,
     .content .audio-button { width: 100%; }
     #wordsModal .modal-content { row-gap: 10px; }
+}
+
+/* Responsive: medium screens — tighten spacing and fonts */
+@media (max-width: 768px) {
+    .top-bar {
+        padding: 12px 14px;
+        gap: 8px;
+    }
+    .top-bar .left,
+    .top-bar .right {
+        gap: 8px;
+    }
+    .top-bar a, .top-bar button {
+        font-size: 14px;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+    .top-bar .center h2,
+    #currentLanguage {
+        font-size: 18px;
+        margin: 0;
+        white-space: nowrap;
+    }
+}
+
+/* Small screens — enforce 2 rows using CSS Grid:
+   Row 1: title (center)
+   Row 2: left buttons | right buttons */
+@media (max-width: 520px) {
+    .top-bar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "center center"
+          "left   right";
+        align-items: center;
+        gap: 8px 10px;
+        padding: 10px 12px;
+    }
+
+    .top-bar .center {
+        grid-area: center;
+        display: flex;
+        justify-content: center;
+    }
+    .top-bar .left {
+        grid-area: left;
+        display: flex;
+        justify-content: flex-start;
+        min-width: 0;
+        gap: 6px;
+    }
+    .top-bar .right {
+        grid-area: right;
+        display: flex;
+        justify-content: flex-end;
+        min-width: 0;
+        gap: 6px;
+    }
+
+    .top-bar a, .top-bar button {
+        font-size: 13px;
+        padding: 7px 9px;
+        border-radius: 8px;
+        white-space: nowrap;
+    }
+
+    .top-bar .center h2,
+    #currentLanguage {
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 90vw;
+        margin: 0;
+    }
+
+    /* Account for increased bar height */
+    body {
+        padding-top: 100px;
+    }
+}
+
+/* Ultra-small screens — stack buttons if needed */
+@media (max-width: 380px) {
+    .top-bar .left, .top-bar .right {
+        flex: 1 1 100%;
+        justify-content: center;
+        gap: 6px;
+    }
+    body {
+        padding-top: 112px;
+    }
 }
