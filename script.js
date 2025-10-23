@@ -254,6 +254,7 @@ function skipWord(countAsSkip = true) {
     wordsMissed.set(currentWordDisplay, wordMissedCount + 1);
     translationInput.style.borderColor = '#333';
     translationInput.disabled = false;
+    translationInput.readOnly = false;
     translationInput.focus();
     translationInput.value = "";
     if(countAsSkip) {
@@ -263,15 +264,27 @@ function skipWord(countAsSkip = true) {
 }
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
+const isMobileDevice = () => /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 const translatedSuccessfully = async () => {
     const translationInput = document.getElementById('translationInput');
     translationInput.style.borderColor = 'green';
-    translationInput.disabled = true;
+
+    if (isMobileDevice()) {
+        translationInput.readOnly = true;
+    } else {
+        translationInput.disabled = true;
+    }
     totalCorrect++;
 
     await delay(1000);
     translationInput.style.borderColor = '#333';
-    translationInput.disabled = false;
+
+    if (isMobileDevice()) {
+        translationInput.readOnly = false;
+    } else {
+        translationInput.disabled = false;
+    }
     translationInput.focus();
 
     const wordMap = getRandomWordWithTranslation();
