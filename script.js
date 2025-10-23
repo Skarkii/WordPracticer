@@ -127,7 +127,11 @@ function revealTranslation() {
     if(revealText.textContent.length !== 0) {
         revealText.textContent = "";
     } else {
-        revealText.textContent = currentWordTranslation;
+        if(hideText) {
+            revealText.textContent = currentWordDisplay + " - " + currentWordTranslation;
+        } else {
+            revealText.textContent = currentWordTranslation;
+        }
     }
 }
 
