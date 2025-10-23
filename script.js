@@ -1,7 +1,8 @@
-const validOptions = ['language', 'languageFile', 'reverseTranslation', 'spellingWarnings', 'textToSpeech', 'hideText',]
+const validOptions = ['languageLoadMethod', 'languageFile', 'languageUrl', 'reverseTranslation', 'spellingWarnings', 'textToSpeech', 'hideText',]
 let programOptions = {
-    language: "English", // Not used yet
-    languageFile: "English.wp", // Same as above
+    languageLoadMethod: "",
+    languageFile: "",
+    languageUrl: "",
 
     reverseTranslation: false,
     spellingWarnings: true,
@@ -15,6 +16,7 @@ function saveOptions() {
 
 function updateOption(key, value){
     if(validOptions.includes(key)){
+        console.log("Update Method: " + key + " - " + value)
         programOptions[key] = value;
         saveOptions();
     }
@@ -24,30 +26,48 @@ function updateOption(key, value){
 }
 
 function loadOptions() {
-    const savedOptions = localStorage.getItem('programOptions') || programOptions;
+    const savedOptions = JSON.parse(localStorage.getItem('programOptions')) || programOptions;
+    programOptions = savedOptions;
 
+    if(savedOptions.languageLoadMethod === "ExistingLanguage") {
+        loadExistingLanguage(savedOptions.languageFile)
+    } else if(savedOptions.languageLoadMethod === "LocalFile") {
+        console.log("Local file is not yet implemented for reloading the page")
+        const wordMap = getRandomWordWithTranslation();
+        updateWord(wordMap);
+    } else {
+        const wordMap = getRandomWordWithTranslation();
+        updateWord(wordMap);
+    }
 
-    setReverseTranslation(savedOptions ? JSON.parse(savedOptions).reverseTranslation : false);
-    setSpellingWarnings(savedOptions ? JSON.parse(savedOptions).spellingWarnings : true);
-    setHideText(savedOptions ? JSON.parse(savedOptions).hideText : false);
-    setTextToSpeech(savedOptions ? JSON.parse(savedOptions).textToSpeech : true);
+    setReverseTranslation(savedOptions.reverseTranslation);
+    setSpellingWarnings(savedOptions.spellingWarnings);
+    setHideText(savedOptions.hideText);
+    setTextToSpeech(savedOptions.textToSpeech);
 
 }
-document.addEventListener('DOMContentLoaded', loadOptions);
 
 let wordListWithTranslations = new Map([
     ]);
 
 function getRandomWordWithTranslation() {
-    let randomWord = currentWordDisplay;
-    let randomTranslation = currentWordTranslation;
-    while (currentWordDisplay === randomWord) {
-        const wordList = Array.from(wordListWithTranslations.keys());
-        const randomIndex = Math.floor(Math.random() * wordList.length);
-        randomWord = wordList[randomIndex];
-        randomTranslation = wordListWithTranslations.get(randomWord);
+    let size = wordListWithTranslations.size;
+    if(size === 0) {
+        console.log("No words loaded")
+        return { word: "No words loaded, press 'Words' to select.", translation: "No words loaded" };
     }
+    const wordList = Array.from(wordListWithTranslations.keys());
+
+    let randomWord = currentWordDisplay;
+    while (randomWord === currentWordDisplay) {
+        const randomIndex = Math.floor(Math.random() * size);
+        randomWord = wordList[randomIndex];
+    }
+    const randomTranslation = wordListWithTranslations.get(randomWord) ?? '';
+
+    console.log("Random word: " + randomWord + " - Translation: " + randomTranslation);
     return { word: randomWord.toLowerCase(), translation: randomTranslation.toLowerCase() };
+
 }
 
 
@@ -138,9 +158,9 @@ function revealTranslation() {
 function setTextToSpeech(value, toggle=false){
     if (toggle) {
         value = !textToSpeech;
+        updateOption('textToSpeech', value);
     }
     textToSpeech = value;
-    updateOption('textToSpeech', value);
     document.getElementById('textToSpeechToggle').checked = value;
 
     if(textToSpeech) {
@@ -163,9 +183,9 @@ function setTextToSpeech(value, toggle=false){
 function setHideText(value, toggle=false) {
     if (toggle) {
         value = !hideText;
+        updateOption('hideText', value);
     }
     hideText = value;
-    updateOption('hideText', value);
     document.getElementById('hideTextToggle').checked = value;
 
     if(hideText) {
@@ -178,20 +198,20 @@ function setHideText(value, toggle=false) {
 function setReverseTranslation(value, toggle=false) {
     if (toggle) {
         value = !reverseTranslation;
+        updateOption('reverseTranslation', value);
+        skipOnClose = true;
     }
     reverseTranslation = value;
-    updateOption('reverseTranslation', value);
     document.getElementById('reverseTranslationToggle').checked = value;
 
-    skipOnClose = true;
 }
 
 function setSpellingWarnings(value, toggle=false) {
     if (toggle) {
         value = !spellingWarnings;
+        updateOption('spellingWarnings', value);
     }
     spellingWarnings = value;
-    updateOption('spellingWarnings', value);
     document.getElementById('spellingWarningsToggle').checked = value;
 
     if(spellingWarnings === false) {
@@ -279,10 +299,15 @@ function applyLanguageFromData(data){
         let words = str.split(':')
         wordListWithTranslations.set(words[0], words[1]);
     });
-    skipOnClose = true;
+
+    const wordMap = getRandomWordWithTranslation();
+    updateWord(wordMap);
+    // skipOnClose = true;
 }
 
 document.getElementById('fileInput').addEventListener('change', function() {
+    updateOption('languageLoadMethod', 'LocalFile')
+    updateOption('languageFile', '')
     const file = this.files[0];
     const reader = new FileReader();
     reader.onload = function() {
@@ -292,6 +317,8 @@ document.getElementById('fileInput').addEventListener('change', function() {
 });
 
 function loadExistingLanguage(languageName) {
+    updateOption('languageLoadMethod', 'ExistingLanguage')
+    updateOption('languageFile', languageName)
     const url = '/WordPracticer/languages/' + languageName + ".wp";
 
     fetch(url)
@@ -340,7 +367,6 @@ function updateWord(wordMap) {
 }
 
 function main() {
-    const wordMap = getRandomWordWithTranslation();
-    updateWord(wordMap);
+    loadOptions();
 }
 main();
