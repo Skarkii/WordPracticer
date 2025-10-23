@@ -104,9 +104,14 @@ function openModal(modal) {
         updateStatistics()
     }
     document.getElementById(Modals[modal]).style.display = 'flex';
+    // Prevent background scroll while modal is open
+    document.body.classList.add('modal-open');
 }
 
 function closeModal(modal) {
+    document.getElementById(Modals[modal]).style.display = 'none';
+    // Re-enable background scroll
+    document.body.classList.remove('modal-open');
     document.getElementById(Modals[modal]).style.display = 'none';
     if(skipOnClose) {
         skipWord(false);

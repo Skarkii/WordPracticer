@@ -13,6 +13,7 @@ body {
         #f6f7fb;
     /* Reduce content jump under fixed bar */
     padding-top: 72px;
+    overflow-x: hidden; /* prevent horizontal spill on mobile */
 }
 .top-bar {
     width: 100%;
@@ -209,34 +210,78 @@ button.audio-button:active {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    padding: 24px;
+    padding: 16px; /* reduce padding a bit on phones */
+    overscroll-behavior: contain; /* keep scroll contained in modal */
+    touch-action: pan-y; /* allow vertical panning */
 }
+
+/* Modal panel */
 .modal-content, .modal .content, .modal-content {
     background: #ffffff;
     padding: clamp(16px, 3.5vw, 24px);
     border-radius: 14px;
-    width: min(680px, 92vw);
+    width: 100%;
+    max-width: 720px;     /* prevent going beyond viewport */
+    max-width: min(720px, 92vw);
+    max-height: 90vh;     /* keep within screen height */
+    overflow: auto;       /* scroll inside the modal */
+    -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
     text-align: left;
     border: 1px solid #e5e7eb;
     box-shadow: 0 16px 44px rgba(0,0,0,0.18);
     animation: modalIn .18s ease-out;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
 }
-@keyframes modalIn {
-    from { transform: translateY(6px); opacity: 0; }
-    to   { transform: translateY(0); opacity: 1; }
+/* Ensure the Options modal stacks items vertically with spacing */
+#optionsModal .modal-content {
+    display: grid;
+    grid-auto-rows: max-content;
+    row-gap: 10px;
 }
-.modal-content h2 {
-    margin-top: 0;
-    font-size: 22px;
-    letter-spacing: -0.02em;
-    color: #111827;
-    margin-bottom: 8px;
+
+/* Make each label a clean row with aligned checkbox + text */
+#optionsModal .modal-content label {
+    display: flex;           /* checkbox + text on one line */
+    align-items: center;
+    gap: 10px;
+    white-space: normal;     /* ensure wrapping if needed */
+    margin: 0;               /* grid spacing controls gaps */
 }
-.modal-content label {
-    display: block;
-    margin: 10px 0;
-    font-size: 15px;
-    color: #374151;
+
+/* Place the Close button at the end/right in this modal */
+#optionsModal .close-button {
+    justify-self: end;
+    float: none;
+}
+
+/* Small devices: keep spacing tight but readable */
+@media (max-width: 520px) {
+    #optionsModal .modal-content {
+        row-gap: 8px;
+    }
+}
+/* Make inputs expand correctly within modal */
+#wordsModal input[type="file"],
+#wordsModal input[type="text"]#languageUrlInput {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* When a modal is open, lock the body scroll */
+body.modal-open {
+    overflow: hidden;
+    height: 100vh; /* prevent iOS body scroll jump */
+}
+
+/* Small-device tweak: ensure overlay padding doesn’t push content out */
+@media (max-width: 520px) {
+    .modal {
+        padding: 12px;
+    }
+    .modal-content {
+        max-height: 88vh;
+    }
 }
 /* Close button retained but refined */
 .close-button {
