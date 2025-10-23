@@ -50,6 +50,7 @@ function getRandomWordWithTranslation() {
 
 
 let currentLanguage = "";
+let languageCodes = "";
 let currentWordDisplay = "";
 let currentWordTranslation = "";
 
@@ -152,9 +153,9 @@ function setSpellingWarnings(value) {
     }
 }
 
-document.getElementById('reverseTranslationToggle').addEventListener('change', setReverseTranslation, checked);
-document.getElementById('spellingWarningsToggle').addEventListener('change', setSpellingWarnings, checked);
-document.getElementById('textToSpeechToggle').addEventListener('change', setTextToSpeech, checked);
+document.getElementById('reverseTranslationToggle').addEventListener('change', setReverseTranslation);
+document.getElementById('spellingWarningsToggle').addEventListener('change', setSpellingWarnings);
+document.getElementById('textToSpeechToggle').addEventListener('change', setTextToSpeech);
 
 function onInputChange() {
     const inputText = this.value.toLowerCase();
@@ -224,7 +225,7 @@ function applyLanguageFromData(data){
             return
         }
         if (i === 1) {
-            //Not sure if I want this Yet.
+            languageCodes = str.split(":");
             return
         }
         let words = str.split(':')
@@ -275,10 +276,15 @@ function updateWord(wordMap) {
 
     document.getElementById('revealText').textContent = "";
 
-    const message = new SpeechSynthesisUtterance(currentWordTranslation);
-    message.lang = "ko"
-
-    window.speechSynthesis.speak(message)
+    if(textToSpeech) {
+        const message = new SpeechSynthesisUtterance(currentWordDisplay);
+        if(reverseTranslation) {
+            message.lang = languageCodes[1];
+        } else {
+            message.lang = languageCodes[0];
+        }
+        window.speechSynthesis.speak(message)
+    }
 }
 
 function main() {
