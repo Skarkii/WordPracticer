@@ -1,4 +1,4 @@
-const validOptions = ['language', 'languageFile', 'reverseTranslation', 'spellingWarnings', 'textToSpeech']
+const validOptions = ['language', 'languageFile', 'reverseTranslation', 'spellingWarnings', 'textToSpeech', 'hideText',]
 let programOptions = {
     language: "English", // Not used yet
     languageFile: "English.wp", // Same as above
@@ -6,6 +6,7 @@ let programOptions = {
     reverseTranslation: false,
     spellingWarnings: true,
     textToSpeech: false,
+    hideText: false,
 }
 
 function saveOptions() {
@@ -28,6 +29,7 @@ function loadOptions() {
 
     setReverseTranslation(savedOptions ? JSON.parse(savedOptions).reverseTranslation : false);
     setSpellingWarnings(savedOptions ? JSON.parse(savedOptions).spellingWarnings : true);
+    setHideText(savedOptions ? JSON.parse(savedOptions).hideText : false);
     setTextToSpeech(savedOptions ? JSON.parse(savedOptions).textToSpeech : true);
 
 }
@@ -63,6 +65,7 @@ let skipOnClose = false;
 let reverseTranslation = false;
 let spellingWarnings = true;
 let textToSpeech = false;
+let hideText = false;
 
 
 
@@ -137,10 +140,34 @@ function setTextToSpeech(value, toggle=false){
     document.getElementById('textToSpeechToggle').checked = value;
 
     if(textToSpeech) {
-        console.log("Text to speech enabled")
         document.getElementById('audioButton').style.display = "block";
+        document.getElementById('hideTextToggle').disabled = false;
+        if(hideText) {
+            document.getElementById('displayText').style.display = "none";
+        }
     } else {
         document.getElementById('audioButton').style.display = "none";
+        document.getElementById('hideTextToggle').disabled = true;
+
+        if(hideText) {
+            document.getElementById('displayText').style.display = "block";
+        }
+    }
+
+}
+
+function setHideText(value, toggle=false) {
+    if (toggle) {
+        value = !hideText;
+    }
+    hideText = value;
+    updateOption('hideText', value);
+    document.getElementById('hideTextToggle').checked = value;
+
+    if(hideText) {
+        document.getElementById('displayText').style.display = "none";
+    } else {
+        document.getElementById('displayText').style.display = "block";
     }
 }
 
@@ -153,7 +180,6 @@ function setReverseTranslation(value, toggle=false) {
     document.getElementById('reverseTranslationToggle').checked = value;
 
     skipOnClose = true;
-    console.log("Reverse: " + reverseTranslation)
 }
 
 function setSpellingWarnings(value, toggle=false) {
@@ -173,6 +199,7 @@ function setSpellingWarnings(value, toggle=false) {
 document.getElementById('reverseTranslationToggle').addEventListener('change', setReverseTranslation.bind(null, true));
 document.getElementById('spellingWarningsToggle').addEventListener('change', setSpellingWarnings.bind(null, true));
 document.getElementById('textToSpeechToggle').addEventListener('change', setTextToSpeech.bind(null, true));
+document.getElementById('hideTextToggle').addEventListener('change', setHideText.bind(null, true));
 
 function onInputChange() {
     const inputText = this.value.toLowerCase();
