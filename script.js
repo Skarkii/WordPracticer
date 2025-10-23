@@ -16,7 +16,6 @@ function saveOptions() {
 
 function updateOption(key, value){
     if(validOptions.includes(key)){
-        console.log("Update Method: " + key + " - " + value)
         programOptions[key] = value;
         saveOptions();
     }
@@ -68,7 +67,6 @@ function getRandomWordWithTranslation() {
     }
     const randomTranslation = wordListWithTranslations.get(randomWord) ?? '';
 
-    console.log("Random word: " + randomWord + " - Translation: " + randomTranslation);
     return { word: randomWord.toLowerCase(), translation: randomTranslation.toLowerCase() };
 
 }
@@ -386,7 +384,6 @@ function updateWord(wordMap) {
         currentWordDisplay = wordMap.translation;
         currentWordTranslation = wordMap.word;
     }
-    console.log("Word: " + currentWordDisplay + " - Translation: " + currentWordTranslation + "")
     document.getElementById('displayText').textContent = currentWordDisplay.charAt(0).toUpperCase() + currentWordDisplay.slice(1);
 
     document.getElementById('revealText').textContent = "";
